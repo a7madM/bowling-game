@@ -1,0 +1,27 @@
+AllCops:
+  Exclude:
+    - 'app/views/**/*'
+    - 'bin/**/*'
+    - 'db/schema.rb'
+    - 'db/migrate/*.rb'
+  Include:
+    - rubocop-rspec
+  DisplayCopNames: true
+  TargetRubyVersion: 2.3
+Rails:
+  Enabled: true
+Style/Documentation:
+  Enabled: false
+Metrics/LineLength:
+  Enabled: false
+Rails/HasAndBelongsToMany:
+  Enabled: false
+Metrics/AbcSize:
+  Max: 20
+Rails/TimeZone:
+  Enabled: false
+Rails/HttpPositionalArguments:
+  Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
