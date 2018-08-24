@@ -3,4 +3,5 @@ class Roll < ApplicationRecord
   validates :game, presence: true
   validates :player, presence: true
   validates :knocked_pins, presence: true, inclusion: { in: 0..10 }
+  scope :player, ->(player) { where(player: player) }
 end

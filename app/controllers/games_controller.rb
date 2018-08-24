@@ -1,4 +1,6 @@
 class GamesController < ApplicationController
+  include GamesHelper
+
   def create
     game = Game.create(game_params)
     if game.persisted?
@@ -10,7 +12,8 @@ class GamesController < ApplicationController
 
   def show
     game = find_game
-    render json: { data: game }
+    score1, score2 = score(game)
+    render json: { data: game, score1: score1, score2: score2 }
   end
 
   private

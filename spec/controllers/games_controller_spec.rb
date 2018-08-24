@@ -26,5 +26,20 @@ RSpec.describe GamesController do
       puts payload
       expect(response).to have_http_status(:success)
     end
+
+    it 'shows a game score' do
+      game = Game.create(player1: 'AA', player2: 'BB')
+      Roll.create(game_id: game.id, player: game.player1, knocked_pins: 3)
+      Roll.create(game_id: game.id, player: game.player1, knocked_pins: 3)
+      Roll.create(game_id: game.id, player: game.player2, knocked_pins: 3)
+      Roll.create(game_id: game.id, player: game.player1, knocked_pins: 3)
+      Roll.create(game_id: game.id, player: game.player2, knocked_pins: 3)
+
+      get :show, params: { id: game.id }
+      puts payload
+      expect(response).to have_http_status(:success)
+      expect(payload['score1']).to eq(9)
+      expect(payload['score2']).to eq(6)
+    end
   end
 end
