@@ -12,7 +12,9 @@ class GamesController < ApplicationController
 
   def show
     game = find_game
-    score1, score2 = score(game)
+    rolls1, rolls2 = rolls(game)
+    score1 = BowlingScore.new(rolls1).score
+    score2 = BowlingScore.new(rolls2).score
     render json: { data: game, score1: score1, score2: score2 }
   end
 
