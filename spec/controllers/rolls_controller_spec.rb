@@ -4,6 +4,7 @@ RSpec.describe RollsController, type: :controller do
   let(:payload) { JSON.parse(response.body) }
   game = Game.create(player1: 'AA', player2: 'BB')
   roll = { game_id: game.id, player: game.player1, knocked_pins: 5 }
+  zero_roll = { game_id: game.id, player: game.player1, knocked_pins: 0 }
   strike_roll = { game_id: game.id, player: game.player1, knocked_pins: 10 }
   roll_without_player = { game_id: game.id, player: '', knocked_pins: 10 }
 
@@ -13,6 +14,12 @@ RSpec.describe RollsController, type: :controller do
 
       expect(response).to have_http_status(:created)
       expect(payload['roll']['id']).to eq(Roll.last.id)
+    end
+
+    it 'rolls zero' do
+      post :create, params: { roll: zero_roll }
+      expect(response).to have_http_status(:created)
+      expect(payload['roll']['knocked_pins']).to eq(0)
     end
 
     it 'creates empty roll to finish the frame' do
