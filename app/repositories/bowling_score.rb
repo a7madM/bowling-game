@@ -2,11 +2,21 @@ class BowlingScore
   attr_accessor :frames, :bonus
 
   def initialize(rolls)
+    rolls = complete_rolls(rolls)
+    to_frames(rolls)
+    self.bonus = frames.last
+  end
+
+  def complete_rolls(rolls)
     if rolls.length < 22
       (22 - rolls.length).times do
         rolls.push(0)
       end
     end
+    rolls
+  end
+
+  def to_frames(rolls)
     length = rolls.length - 2
     self.frames = []
     (0..length).step(2).each do |i|
@@ -16,7 +26,6 @@ class BowlingScore
         frames.push([rolls[i], rolls[i + 1]])
       end
     end
-    self.bonus = frames.last
   end
 
   def strike?(frame)
@@ -30,7 +39,6 @@ class BowlingScore
   def score
     score = 0
     frames.each_with_index do |frame, index|
-      # byebug
       score += sum_frame(frame) if !strike?(frame) && !spare?(frame) && frame.object_id != bonus.object_id
       score += score_spare(frame, index) if spare?(frame) && frame.object_id != bonus.object_id
       score += score_strike(frame, index) if strike?(frame) && frame.object_id != bonus.object_id
