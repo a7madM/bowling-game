@@ -26,7 +26,9 @@ RSpec.describe GamesController do
       get :show, params: { id: game.id }
       expect(response).to have_http_status(:success)
     end
+  end
 
+  context '#scoring' do
     it 'gutter game zeroos' do
       20.times do
         Roll.create(game_id: game.id, player: game.player1, knocked_pins: 0)
@@ -38,15 +40,29 @@ RSpec.describe GamesController do
       expect(payload['score2']).to eq(0)
     end
 
+    it 'normal rolls' do
+      Roll.create(game_id: game.id, player: game.player1, knocked_pins: 3)
+      Roll.create(game_id: game.id, player: game.player1, knocked_pins: 4)
+      Roll.create(game_id: game.id, player: game.player1, knocked_pins: 3)
+
+      Roll.create(game_id: game.id, player: game.player2, knocked_pins: 3)
+      Roll.create(game_id: game.id, player: game.player2, knocked_pins: 5)
+
+      get :show, params: { id: game.id }
+
+      expect(payload['score1']).to eq(10)
+      expect(payload['score2']).to eq(8)
+    end
+
     it 'spare' do
       Roll.create(game_id: game.id, player: game.player1, knocked_pins: 3)
       Roll.create(game_id: game.id, player: game.player1, knocked_pins: 7)
       Roll.create(game_id: game.id, player: game.player1, knocked_pins: 7)
-      Roll.create(game_id: game.id, player: game.player1, knocked_pins: 0)
+      Roll.create(game_id: game.id, player: game.player1, knocked_pins: 1)
 
       Roll.create(game_id: game.id, player: game.player2, knocked_pins: 0)
       get :show, params: { id: game.id }
-      expect(payload['score1']).to eq(24)
+      expect(payload['score1']).to eq(25)
       expect(payload['score2']).to eq(0)
     end
 
@@ -60,21 +76,19 @@ RSpec.describe GamesController do
 
       Roll.create(game_id: game.id, player: game.player2, knocked_pins: 0)
       get :show, params: { id: game.id }
-      expect(payload['score1']).to eq(38)
+      expect(payload['score1']).to eq(32)
       expect(payload['score2']).to eq(0)
     end
-    it 'normal rolls' do
-      Roll.create(game_id: game.id, player: game.player1, knocked_pins: 3)
-      Roll.create(game_id: game.id, player: game.player1, knocked_pins: 4)
-      Roll.create(game_id: game.id, player: game.player1, knocked_pins: 3)
 
-      Roll.create(game_id: game.id, player: game.player2, knocked_pins: 3)
-      Roll.create(game_id: game.id, player: game.player2, knocked_pins: 5)
+    it 'perfect game' do
+      11.times do
+        Roll.create(game_id: game.id, player: game.player1, knocked_pins: 10)
+        Roll.create(game_id: game.id, player: game.player2, knocked_pins: 10)
+      end
 
       get :show, params: { id: game.id }
-
-      expect(payload['score1']).to eq(10)
-      expect(payload['score2']).to eq(8)
+      expect(payload['score1']).to eq(300)
+      expect(payload['score2']).to eq(300)
     end
   end
 end
