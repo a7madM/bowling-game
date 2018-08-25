@@ -1,0 +1,159 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "API V1",
+    "version": "v1"
+  },
+  "paths": {
+    "/games": {
+      "post": {
+        "summary": "Creates a game",
+        "tags": [
+          "Games"
+        ],
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "game",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "player1": {
+                  "type": "string"
+                },
+                "player2": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "player1",
+                "player2"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "game created"
+          },
+          "422": {
+            "description": "invalid request"
+          }
+        }
+      }
+    },
+    "/games/:id": {
+      "get": {
+        "summary": "Show game and its score",
+        "tags": [
+          "Games"
+        ],
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "game",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "name found",
+            "schema": {
+              "name": "game",
+              "in": "body",
+              "type": "object",
+              "properties": {
+                "game": {
+                  "type": "object"
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "player1": {
+                  "type": "string"
+                },
+                "player2": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "player1",
+                "player2"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/rolls": {
+      "post": {
+        "summary": "Creates a roll",
+        "tags": [
+          "Rolls"
+        ],
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "roll",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "player": {
+                  "type": "string"
+                },
+                "knocked_pins": {
+                  "type": "integer"
+                },
+                "game_id": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "player",
+                "knocked_pins",
+                "game_id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "roll created"
+          },
+          "422": {
+            "description": "invalid request"
+          }
+        }
+      }
+    }
+  }
+}
