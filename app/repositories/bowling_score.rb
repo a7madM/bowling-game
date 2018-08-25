@@ -14,7 +14,7 @@ class BowlingScore
         frames.push([rolls[i], 0])
       else
         frames.push([rolls[i], rolls[i + 1]])
-        byebug
+        # byebug
       end
     end
 

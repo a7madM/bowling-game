@@ -1,7 +1,11 @@
 class RollsController < ApplicationController
   def create
     roll = Roll.create(roll_params)
-    render json: { roll: roll }, status: :created
+    if roll.persisted?
+      render json: { roll: roll }, status: :created
+    else
+      render json: { errors: roll.errors }, status: :unprocessable_entity
+    end
   end
 
   def roll_params
